@@ -219,6 +219,7 @@ static void uv_poll(uv_loop_t* loop, int block) {
 
 
 static void uv_poll_ex(uv_loop_t* loop, int block) {
+    UVLOG("%s block:%d\n", __FUNCTION__,block);
   BOOL success;
   DWORD timeout;
   uv_req_t* req;
@@ -260,6 +261,7 @@ static int uv__loop_alive(uv_loop_t* loop) {
 
 
 int uv_run(uv_loop_t *loop, uv_run_mode mode) {
+    UVLOG("uv_run mode = %d", mode);
   int r;
   void (*poll)(uv_loop_t* loop, int block);
 
@@ -273,6 +275,7 @@ int uv_run(uv_loop_t *loop, uv_run_mode mode) {
 
   r = uv__loop_alive(loop);
   while (r != 0 && loop->stop_flag == 0) {
+      UVLOG(">---------------------------------------------------");
     uv_update_time(loop);
     uv_process_timers(loop);
 
@@ -297,8 +300,10 @@ int uv_run(uv_loop_t *loop, uv_run_mode mode) {
 
     uv_check_invoke(loop);
     r = uv__loop_alive(loop);
+    UVLOG("---------------------------------------------------<");
     if (mode & (UV_RUN_ONCE | UV_RUN_NOWAIT))
       break;
+    
   }
 
   /* The if statement lets the compiler compile it to a conditional store.

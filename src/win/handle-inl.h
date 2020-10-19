@@ -95,6 +95,7 @@ INLINE static void uv_want_endgame(uv_loop_t* loop, uv_handle_t* handle) {
 
 
 INLINE static void uv_process_endgames(uv_loop_t* loop) {
+    UVLOG("%s\n", __FUNCTION__);
   uv_handle_t* handle;
 
   while (loop->endgame_handles) {

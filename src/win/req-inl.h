@@ -91,6 +91,7 @@ INLINE static uv_req_t* uv_overlapped_to_req(OVERLAPPED* overlapped) {
 
 
 INLINE static void uv_insert_pending_req(uv_loop_t* loop, uv_req_t* req) {
+    req->overlapped;
   req->next_req = NULL;
   if (loop->pending_reqs_tail) {
     req->next_req = loop->pending_reqs_tail->next_req;
@@ -131,6 +132,7 @@ INLINE static void uv_insert_pending_req(uv_loop_t* loop, uv_req_t* req) {
 
 
 INLINE static void uv_process_reqs(uv_loop_t* loop) {
+    UVLOG("%s\n", __FUNCTION__);
   uv_req_t* req;
   uv_req_t* first;
   uv_req_t* next;

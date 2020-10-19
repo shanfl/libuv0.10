@@ -29,6 +29,7 @@
 
 
 void uv_update_time(uv_loop_t* loop) {
+    UVLOG("%s\n", __FUNCTION__);
   DWORD ticks = GetTickCount();
 
   /* The assumption is made that LARGE_INTEGER.QuadPart has the same type */
@@ -208,6 +209,7 @@ DWORD uv_get_poll_timeout(uv_loop_t* loop) {
 
 
 void uv_process_timers(uv_loop_t* loop) {
+    UVLOG("%s\n", __FUNCTION__);
   uv_timer_t* timer;
 
   /* Call timer callbacks */

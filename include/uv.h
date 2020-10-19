@@ -27,6 +27,14 @@
 extern "C" {
 #endif
 
+// shanfl
+#include<stdio.h>
+#define UVLOG(format,...) do {  \
+    fprintf(stderr,##format,__VA_ARGS__); \
+    fprintf(stderr,"\n"); \
+    } while(0)
+
+
 #ifdef _WIN32
   /* Windows - set up dll import/export decorators. */
 # if defined(BUILDING_UV_SHARED)

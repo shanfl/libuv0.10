@@ -380,7 +380,7 @@ static void uv_tcp_queue_accept(uv_tcp_t* handle, uv_tcp_accept_t* req) {
   if (handle->flags & UV_HANDLE_EMULATE_IOCP) {
     req->overlapped.hEvent = (HANDLE) ((ULONG_PTR) req->event_handle | 1);
   }
-
+  fprintf(stderr, "%s,handle = %p,uv_tcp_accept_t = %p accept_socket = %d\n", __FUNCTION__,handle, req, accept_socket);
   success = handle->func_acceptex(handle->socket,
                                   accept_socket,
                                   (void*)req->accept_buffer,
@@ -547,12 +547,13 @@ int uv_tcp_listen(uv_tcp_t* handle, int backlog, uv_connection_cb cb) {
       uv_fatal_error(ERROR_OUTOFMEMORY, "malloc");
     }
 
-    for (i = 0; i < simultaneous_accepts; i++) {
+    for (i = 0; i < simultaneous_accepts; i++) {      
       req = &handle->accept_reqs[i];
+      fprintf(stderr, "accept[%d/%d] poniter = %p\n", i, simultaneous_accepts, req);
       uv_req_init(loop, (uv_req_t*)req);
       req->type = UV_ACCEPT;
       req->accept_socket = INVALID_SOCKET;
-      req->data = handle;
+      req->data = handle;  /// data = uv_tcp_t-handle
 
       req->wait_handle = INVALID_HANDLE_VALUE;
       if (handle->flags & UV_HANDLE_EMULATE_IOCP) {
@@ -1063,7 +1064,7 @@ void uv_process_tcp_write_req(uv_loop_t* loop, uv_tcp_t* handle,
   DECREASE_PENDING_REQ_COUNT(handle);
 }
 
-
+//uv_process_tcp_##name##_req
 void uv_process_tcp_accept_req(uv_loop_t* loop, uv_tcp_t* handle,
     uv_req_t* raw_req) {
   uv_tcp_accept_t* req = (uv_tcp_accept_t*) raw_req;

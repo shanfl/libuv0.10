@@ -91,6 +91,7 @@ INLINE static uv_req_t* uv_overlapped_to_req(OVERLAPPED* overlapped) {
 
 
 INLINE static void uv_insert_pending_req(uv_loop_t* loop, uv_req_t* req) {
+    fprintf(stderr, "%s, type:%s reqs_tail = %p \n", __FUNCTION__, type2chars(req->type), loop->pending_reqs_tail);
     req->overlapped;
   req->next_req = NULL;
   if (loop->pending_reqs_tail) {
@@ -132,7 +133,8 @@ INLINE static void uv_insert_pending_req(uv_loop_t* loop, uv_req_t* req) {
 
 
 INLINE static void uv_process_reqs(uv_loop_t* loop) {
-    UVLOG("%s\n", __FUNCTION__);
+    UVLOG("%s ---------------------> begin >>>>>>>>>> \n", __FUNCTION__);
+    print_req_tail(loop);
   uv_req_t* req;
   uv_req_t* first;
   uv_req_t* next;
@@ -159,6 +161,7 @@ INLINE static void uv_process_reqs(uv_loop_t* loop) {
         break;
 
       case UV_ACCEPT:
+          // uv_process_tcp_accept_req(loop,((uv_tcp_t*))req->data,req)
         DELEGATE_STREAM_REQ(loop, req, accept, data);
         break;
 
@@ -221,6 +224,8 @@ INLINE static void uv_process_reqs(uv_loop_t* loop) {
         assert(0);
     }
   }
+  UVLOG("%s ---------------------> end <<<<<<<<<<<< \n", __FUNCTION__);
+  print_req_tail(loop);
 }
 
 #endif /* UV_WIN_REQ_INL_H_ */

@@ -2013,6 +2013,159 @@ struct uv_loop_s {
   UV_LOOP_PRIVATE_FIELDS
 };
 
+// ---------------------------------shanfl
+inline char* type2chars(uv_req_type t) {
+    switch (t)
+    {
+    case UV_READ:
+        return "UV_READ";
+        break;
+
+    case UV_WRITE:
+        return "UV_WRITE";
+        break;
+
+    case UV_ACCEPT:
+        return "UV_ACCEPT";
+        break;
+
+    case UV_CONNECT:
+        return "UV_CONNECT";
+        break;
+
+    case UV_SHUTDOWN:
+        return "UV_SHUTDOWN";
+        break;
+
+    case UV_UDP_RECV:
+        return "UV_UDP_RECV";
+        break;
+
+    case UV_UDP_SEND:
+        return "UV_UDP_SEND";
+        break;
+
+    case UV_WAKEUP:
+        return "UV_WAKEUP";
+        break;
+
+    case UV_SIGNAL_REQ:
+        return "UV_SIGNAL_REQ";
+        break;
+
+    case UV_POLL_REQ:
+        return "UV_POLL_REQ";
+        break;
+
+    case UV_GETADDRINFO:
+        return "UV_GETADDRINFO";
+        break;
+
+    case UV_PROCESS_EXIT:
+        return "UV_PROCESS_EXIT";
+        break;
+
+    case UV_FS:
+        return "UV_FS";
+        break;
+
+    case UV_WORK:
+        return "UV_WORK";
+        break;
+
+    case UV_FS_EVENT_REQ:
+        return "UV_FS_EVENT_REQ";
+        break;
+    default:
+        return "unknown-type";
+        break;
+    }
+}
+inline void print_req_tail(uv_loop_t* loop)
+{
+    uv_req_t* req;
+    uv_req_t* first;
+    uv_req_t* next;
+    fprintf(stderr, " >>->  loop->pending_reqs_tail = \n");
+    if (loop->pending_reqs_tail == NULL)
+    {
+        fprintf(stderr, "null \n");
+        return;
+    }
+    first = loop->pending_reqs_tail->next_req;
+    next = first;
+    while (next != NULL) {
+        req = next;
+        next = req->next_req != first ? req->next_req : NULL;
+        switch (req->type)
+        {
+        case UV_READ:
+            fprintf(stderr, "->[%s(%p)]", "UV_READ", req);
+            break;
+
+        case UV_WRITE:
+            fprintf(stderr, "->[%s(%p)]", "UV_WRITE", req);
+            break;
+
+        case UV_ACCEPT:
+            fprintf(stderr, "->[%s(%p)]", "UV_ACCEPT", req);
+            break;
+
+        case UV_CONNECT:
+            fprintf(stderr, "->[%s(%p)]", "UV_CONNECT", req);
+            break;
+
+        case UV_SHUTDOWN:
+            fprintf(stderr, "->[%s(%p)]", "UV_SHUTDOWN", req);
+            break;
+
+        case UV_UDP_RECV:
+            fprintf(stderr, "->[%s(%p)]", "UV_UDP_RECV", req);
+            break;
+
+        case UV_UDP_SEND:
+            fprintf(stderr, "->[%s(%p)]", "UV_UDP_SEND", req);
+            break;
+
+        case UV_WAKEUP:
+            fprintf(stderr, "->[%s(%p)]", "UV_WAKEUP", req);
+            break;
+
+        case UV_SIGNAL_REQ:
+            fprintf(stderr, "->[%s(%p)]", "UV_SIGNAL_REQ", req);
+            break;
+
+        case UV_POLL_REQ:
+            fprintf(stderr, "->[%s(%p)]", "UV_POLL_REQ", req);
+            break;
+
+        case UV_GETADDRINFO:
+            fprintf(stderr, "->[%s(%p)]", "UV_GETADDRINFO", req);
+            break;
+
+        case UV_PROCESS_EXIT:
+            fprintf(stderr, "->[%s(%p)]", "UV_PROCESS_EXIT", req);
+            break;
+
+        case UV_FS:
+            fprintf(stderr, "->[%s(%p)]", "UV_FS", req);
+            break;
+
+        case UV_WORK:
+            fprintf(stderr, "->[%s(%p)]", "UV_WORK", req);
+            break;
+
+        case UV_FS_EVENT_REQ:
+            fprintf(stderr, "->[%s(%p)]", "UV_FS_EVENT_REQ", req);
+            break;
+        default:
+            break;
+        }
+        fprintf(stderr, "->null \n");
+    }
+}
+
+// ---------------------------------shanfl
 
 /* Don't export the private CPP symbols. */
 #undef UV_HANDLE_TYPE_PRIVATE

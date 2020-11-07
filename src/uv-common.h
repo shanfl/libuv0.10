@@ -119,19 +119,30 @@ void uv__fs_poll_close(uv_fs_poll_t* handle);
 
 #define uv__has_active_reqs(loop)                                             \
   (ngx_queue_empty(&(loop)->active_reqs) == 0)
-
+#if 0
 #define uv__req_register(loop, req)                                           \
   do {                                                                        \
     ngx_queue_insert_tail(&(loop)->active_reqs, &(req)->active_queue);        \
   }                                                                           \
   while (0)
+#endif
 
+inline void uv__req_register(uv_loop_t* loop, uv_req_t* req)
+{
+    ngx_queue_insert_tail(&(loop)->active_reqs, &(req)->active_queue);
+}
+#if 0
 #define uv__req_unregister(loop, req)                                         \
   do {                                                                        \
     assert(uv__has_active_reqs(loop));                                        \
     ngx_queue_remove(&(req)->active_queue);                                   \
   }                                                                           \
   while (0)
+#endif 
+inline void uv__req_unregister(uv_loop_t* loop, uv_req_t* req) {
+    assert(uv__has_active_reqs(loop)); 
+    ngx_queue_remove(&(req)->active_queue);
+}
 
 #define uv__has_active_handles(loop)                                          \
   ((loop)->active_handles > 0)

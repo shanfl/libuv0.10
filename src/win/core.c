@@ -219,7 +219,7 @@ static void uv_poll(uv_loop_t* loop, int block) {
 
 
 static void uv_poll_ex(uv_loop_t* loop, int block) {
-    UVLOG("%s block:%d\n", __FUNCTION__,block);
+    UVLOG("===========> %s block:%d\n", __FUNCTION__,block);
   BOOL success;
   DWORD timeout;
   uv_req_t* req;
@@ -245,11 +245,14 @@ static void uv_poll_ex(uv_loop_t* loop, int block) {
       /* Package was dequeued */
       req = uv_overlapped_to_req(overlappeds[i].lpOverlapped);
       uv_insert_pending_req(loop, req);
+      print_req_tail(loop);
     }
   } else if (GetLastError() != WAIT_TIMEOUT) {
     /* Serious error */
     uv_fatal_error(GetLastError(), "GetQueuedCompletionStatusEx");
   }
+
+  UVLOG("===========< %s block:%d end\n", __FUNCTION__, block);
 }
 
 

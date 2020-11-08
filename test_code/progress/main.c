@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include <uv.h>
 
@@ -17,9 +17,17 @@ void fake_download(uv_work_t *req) {
         async.data = (void*) &percentage;
         uv_async_send(&async);
 
+#ifdef _MSC_VER
+        Sleep(1000);
+#else
         sleep(1);
-        downloaded += (200+random())%1000; // can only download max 1000bytes/sec,
+#endif
+#ifdef _MSC_VER
+        downloaded += (200+1)%1000; // can only download max 1000bytes/sec,
                                            // but at least a 200;
+#else 
+        downloaded += (200 + random()) % 1000; // can only download max 1000bytes/sec,  
+#endif
     }
 }
 

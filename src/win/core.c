@@ -303,6 +303,7 @@ int uv_run(uv_loop_t *loop, uv_run_mode mode) {
 
     uv_check_invoke(loop);
     r = uv__loop_alive(loop);
+    uv_print_all_handles(loop);
     UVLOG("---------------------------------------------------<");
     if (mode & (UV_RUN_ONCE | UV_RUN_NOWAIT))
       break;

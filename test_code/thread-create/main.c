@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include <uv.h>
 
@@ -7,7 +7,11 @@ void hare(void *arg) {
     int tracklen = *((int *) arg);
     while (tracklen) {
         tracklen--;
+#ifdef _MSC_VER
+        Sleep(1000);
+#else
         sleep(1);
+#endif
         fprintf(stderr, "Hare ran another step\n");
     }
     fprintf(stderr, "Hare done running!\n");
@@ -18,7 +22,11 @@ void tortoise(void *arg) {
     while (tracklen) {
         tracklen--;
         fprintf(stderr, "Tortoise ran another step\n");
-        sleep(3);
+#ifdef _MSC_VER
+        Sleep(1000);
+#else
+        sleep(1);
+#endif
     }
     fprintf(stderr, "Tortoise done running!\n");
 }

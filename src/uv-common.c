@@ -414,7 +414,9 @@ static void uv__print_handles(uv_loop_t* loop, int only_active) {
 
 
 void uv_print_all_handles(uv_loop_t* loop) {
+  fprintf(stderr, "%s --------------> \n", __FUNCTION__);
   uv__print_handles(loop, 0);
+  fprintf(stderr, "%s --------------< \n", __FUNCTION__);
 }
 
 

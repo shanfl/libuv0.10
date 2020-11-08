@@ -305,6 +305,143 @@
         },
       },
 	},
+	
+	
+    {
+      'target_name': 'uvcat',
+      'type': 'executable',
+      'dependencies': [ 'libuv' ],
+      'sources': 
+      [
+        'test_code/uvcat/main.c'
+      ],
+      'msvs-settings': {
+          'VCLinkerTool': {
+            'SubSystem': 1, # /subsystem:console
+          },
+        },
+    },
+
+
+    {
+      'target_name': 'progress',
+      'type': 'executable',
+      'dependencies': [ 'libuv' ],
+      'sources': 
+      [
+        'test_code/progress/main.c'
+      ],
+      'msvs-settings': {
+          'VCLinkerTool': {
+            'SubSystem': 1, # /subsystem:console
+          },
+        },
+    },
+
+    {
+      'target_name': 'thread-create',
+      'type': 'executable',
+      'dependencies': [ 'libuv' ],
+      'sources': 
+      [
+        'test_code/thread-create/main.c'
+      ],
+      'msvs-settings': {
+          'VCLinkerTool': {
+            'SubSystem': 1, # /subsystem:console
+          },
+        },
+    },
+
+    
+    {
+      'target_name': 'proc-streams',
+      'type': 'executable',
+      'dependencies': [ 'libuv' ],
+      'sources': 
+      [
+        'test_code/proc-streams/main.c',
+        'test_code/proc-streams/test.c'
+      ],
+      'msvs-settings': {
+          'VCLinkerTool': {
+            'SubSystem': 1, # /subsystem:console
+          },
+        },
+    },
+
+
+    {
+      'target_name': 'pipe-echo-server',
+      'type': 'executable',
+      'dependencies': [ 'libuv' ],
+      'sources': 
+      [
+        'test_code/pipe-echo-server/main.c'
+      ],
+      'msvs-settings': {
+          'VCLinkerTool': {
+            'SubSystem': 1, # /subsystem:console
+          },
+        },
+    },
+
+    {
+      'target_name': 'queue-work',
+      'type': 'executable',
+      'dependencies': [ 'libuv' ],
+      'sources': 
+      [
+        'test_code/queue-work/main.c'
+      ],
+      'msvs-settings': {
+          'VCLinkerTool': {
+            'SubSystem': 1, # /subsystem:console
+          },
+        },
+    },
+    {
+      'target_name': 'queue-cancel',
+      'type': 'executable',
+      'dependencies': [ 'libuv' ],
+      'sources': 
+      [
+        'test_code/queue-cancel/main.c'
+      ],
+      'msvs-settings': {
+          'VCLinkerTool': {
+            'SubSystem': 1, # /subsystem:console
+          },
+        },
+    },
+    {
+      'target_name': 'signal',
+      'type': 'executable',
+      'dependencies': [ 'libuv' ],
+      'sources': 
+      [
+        'test_code/signal/main.c'
+      ],
+      'msvs-settings': {
+          'VCLinkerTool': {
+            'SubSystem': 1, # /subsystem:console
+          },
+        },
+    },
+    {
+      'target_name': 'spawn',
+      'type': 'executable',
+      'dependencies': [ 'libuv' ],
+      'sources': 
+      [
+        'test_code/spawn/main.c'
+      ],
+      'msvs-settings': {
+          'VCLinkerTool': {
+            'SubSystem': 1, # /subsystem:console
+          },
+        },
+    },
 
     {
       'target_name': 'run-tests',

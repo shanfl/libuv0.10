@@ -17,7 +17,7 @@ int main() {
     loop = uv_default_loop();
 
     size_t size = 500;
-    char path[size];
+    char path[500];
     uv_exepath(path, &size);
     strcpy(path + (strlen(path) - strlen("proc-streams")), "test");
 
@@ -40,8 +40,8 @@ int main() {
     options.args = args;
 
     int r;
-    if ((r = uv_spawn(loop, &child_req, &options))) {
-        fprintf(stderr, "%s\n", uv_strerror(r));
+    if ((r = uv_spawn(loop, &child_req,options))) {
+        //fprintf(stderr, "%s\n", uv_strerror(r));
         return 1;
     }
 

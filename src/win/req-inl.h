@@ -91,7 +91,7 @@ INLINE static uv_req_t* uv_overlapped_to_req(OVERLAPPED* overlapped) {
 
 
 INLINE static void uv_insert_pending_req(uv_loop_t* loop, uv_req_t* req) {
-    fprintf(stderr, "%s, type:%s reqs_tail = %p \n", __FUNCTION__, type2chars(req->type), loop->pending_reqs_tail);
+    fprintf(stderr, "%s, req = %p, type:%s reqs_tail = %p \n", __FUNCTION__, req,type2chars(req->type), loop->pending_reqs_tail);
     req->overlapped;
   req->next_req = NULL;
   if (loop->pending_reqs_tail) {

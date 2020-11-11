@@ -41,6 +41,7 @@
 
 
 #define QUEUE_FS_TP_JOB(loop, req)                                          \
+  fprintf(stderr,"QUEUE_FS_TP_JOB in %s req=%p  follow QueueUserWorkItem \n",__FUNCTION__,req);      \
   do {                                                                      \
     if (!QueueUserWorkItem(&uv_fs_thread_proc,                              \
                            req,                                             \
@@ -48,6 +49,7 @@
       uv__set_sys_error((loop), GetLastError());                            \
       return -1;                                                            \
     }                                                                       \
+    fprintf(stderr,"QUEUE_FS_TP_JOB in %s req=%p  after QueueUserWorkItem \n",__FUNCTION__,req);      \
     uv__req_register(loop, req);                                            \
   } while (0)
 

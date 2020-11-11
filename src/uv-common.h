@@ -169,6 +169,7 @@ inline void uv__req_unregister(uv_loop_t* loop, uv_req_t* req) {
 
 #define uv__handle_start(h)                                                   \
   do {                                                                        \
+    fprintf(stderr,"uv__handle_start(%p) in %s\n",h,__FUNCDNAME__);           \
     assert(((h)->flags & UV__HANDLE_CLOSING) == 0);                           \
     if (((h)->flags & UV__HANDLE_ACTIVE) != 0) break;                         \
     (h)->flags |= UV__HANDLE_ACTIVE;                                          \

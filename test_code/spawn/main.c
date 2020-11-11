@@ -25,8 +25,8 @@ int main() {
     options.args = args;
 
     int r;
-    if ((r = uv_spawn(loop, &child_req, &options))) {
-        fprintf(stderr, "%s\n", uv_strerror(r));
+    if ((r = uv_spawn(loop, &child_req, options))) {
+        //fprintf(stderr, "%s\n", uv_strerror(r));
         return 1;
     } else {
         fprintf(stderr, "Launched process with ID %d\n", child_req.pid);

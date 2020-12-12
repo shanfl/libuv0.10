@@ -291,13 +291,13 @@ inline static void  uv__handle_unref(uv_handle_t* h)
 #else 
 inline void uv__handle_init(uv_loop_t* loop_, uv_handle_t* h, uv_handle_type type_)
 {
-	do {
-		(h)->loop = (loop_);
-		(h)->type = (type_);
-		(h)->flags = UV__HANDLE_REF;  /* Ref the loop when active. */
-		ngx_queue_insert_tail(&(loop_)->handle_queue, &(h)->handle_queue);
-		uv__handle_platform_init(h);
-	} while (0);
+    do {
+    	(h)->loop = (loop_);
+    	(h)->type = (type_);
+    	(h)->flags = UV__HANDLE_REF;  /* Ref the loop when active. */
+    	ngx_queue_insert_tail(&(loop_)->handle_queue, &(h)->handle_queue);
+    	uv__handle_platform_init(h);
+    } while (0);
 }
 #endif
 

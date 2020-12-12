@@ -80,6 +80,7 @@
 
 
 INLINE static void uv_req_init(uv_loop_t* loop, uv_req_t* req) {
+  //memset(req, 0, sizeof(uv_req_t));
   req->type = UV_UNKNOWN_REQ;
   SET_REQ_SUCCESS(req);
 }

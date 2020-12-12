@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include <uv.h>
 
-#define FIB_UNTIL 25
+#define FIB_UNTIL 1
 uv_loop_t *loop;
 
 long fib_(long t) {
@@ -16,10 +16,10 @@ long fib_(long t) {
 
 void fib(uv_work_t *req) {
     int n = *(int *) req->data;
-    if (random() % 2)
-        sleep(1);
+    if (rand() % 2)
+        Sleep(1000);
     else
-        sleep(3);
+        Sleep(3000);
     long fib = fib_(n);
     fprintf(stderr, "%dth fibonacci is %lu\n", n, fib);
 }

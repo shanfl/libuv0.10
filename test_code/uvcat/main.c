@@ -15,15 +15,19 @@ static char buffer[1024];
 static uv_buf_t iov;
 
 void on_write(uv_fs_t *req) {
+    fprintf(stderr, "%s \n", __FUNCTION__);
     if (req->result < 0) {
         //fprintf(stderr, "Write error: %s\n", uv_strerror((int)req->result));
     }
     else {
+        fprintf(stderr, "->%s  before uv_fs_read\n", __FUNCTION__);
         uv_fs_read(uv_default_loop(), &read_req, open_req.result, &iov, 1, -1, on_read);
+        fprintf(stderr, "->%s  after uv_fs_read\n", __FUNCTION__);
     }
 }
 
 void on_read(uv_fs_t *req) {
+    fprintf(stderr, "%s \n", __FUNCTION__);
     if (req->result < 0) {
         //fprintf(stderr, "Read error: %s\n", uv_strerror(req->result));
     }
@@ -34,18 +38,23 @@ void on_read(uv_fs_t *req) {
     }
     else if (req->result > 0) {
         iov.len = req->result;
+        fprintf(stderr, "->%s  before uv_fs_write\n", __FUNCTION__);
         uv_fs_write(uv_default_loop(), &write_req, 1, &iov, 1, -1, on_write);
+        fprintf(stderr, "->%s  after uv_fs_write\n", __FUNCTION__);
     }
 }
 
 void on_open(uv_fs_t *req) {
+    fprintf(stderr, "%s \n", __FUNCTION__);
     // The request passed to the callback is the same as the one the call setup
     // function was passed.
     assert(req == &open_req);
     if (req->result >= 0) {
+        fprintf(stderr, "->%s  before uv_fs_read\n", __FUNCTION__);
         iov = uv_buf_init(buffer, sizeof(buffer));
         uv_fs_read(uv_default_loop(), &read_req, req->result,
                    &iov, 1, -1, on_read);
+        fprintf(stderr, "->%s  before uv_fs_read\n", __FUNCTION__);
     }
     else {
         //fprintf(stderr, "error opening file: %s\n", uv_strerror((int)req->result));
@@ -53,6 +62,7 @@ void on_open(uv_fs_t *req) {
 }
 
 int main(int argc, char **argv) {
+    argv[1] = "d:/c.md";
     uv_fs_open(uv_default_loop(), &open_req, argv[1], O_RDONLY, 0, on_open);
     uv_run(uv_default_loop(), UV_RUN_DEFAULT);
 

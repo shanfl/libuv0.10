@@ -39,7 +39,7 @@ const unsigned int uv_active_tcp_streams_threshold = 0;
 /*
  * Number of simultaneous pending AcceptEx calls.
  */
-const unsigned int uv_simultaneous_server_accepts = 32;
+const unsigned int uv_simultaneous_server_accepts = 2;// 32;
 
 /* A zero-size buffer for use by uv_tcp_read */
 static char uv_zero_[] = "";
@@ -149,10 +149,11 @@ static int uv_tcp_set_socket(uv_loop_t* loop, uv_tcp_t* handle,
 
 
 int uv_tcp_init(uv_loop_t* loop, uv_tcp_t* handle) {
+  memset(handle, 0, sizeof(uv_tcp_t));
   uv_stream_init(loop, (uv_stream_t*) handle, UV_TCP);
 
-  handle->accept_reqs = NULL;
-  handle->pending_accepts = NULL;
+  handle->accept_reqs = NULL;           // listen时初始化 uv_tcp_accept_t[uv_simultaneous_server_accepts]
+  handle->pending_accepts = NULL;       // 如果接收到连接,则放到此链表中
   handle->socket = INVALID_SOCKET;
   handle->reqs_pending = 0;
   handle->func_acceptex = NULL;
@@ -397,7 +398,7 @@ static void uv_tcp_queue_accept(uv_tcp_t* handle, uv_tcp_accept_t* req) {
     uv_insert_pending_req(loop, (uv_req_t*)req);
   } else if (UV_SUCCEEDED_WITH_IOCP(success)) {
     /* The req will be processed with IOCP. */
-    req->accept_socket = accept_socket;
+    req->accept_socket = accept_socket;                     // 用于接受连接的socket
     handle->reqs_pending++;
     if (handle->flags & UV_HANDLE_EMULATE_IOCP &&
         req->wait_handle == INVALID_HANDLE_VALUE &&

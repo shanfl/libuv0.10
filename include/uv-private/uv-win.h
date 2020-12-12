@@ -378,6 +378,7 @@ RB_HEAD(uv_timer_tree_s, uv_timer_s);
   uv_connection_cb connection_cb;
 
 #define UV_STREAM_PRIVATE_FIELDS                                              \
+  /* 多少个待处理的req */                                                       \
   unsigned int reqs_pending;                                                  \
   int activecnt;                                                              \
   uv_read_t read_req;                                                         \

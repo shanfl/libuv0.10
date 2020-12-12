@@ -27,7 +27,7 @@
 #include "uv.h"
 #include "internal.h"
 
-
+#if 0
 #define DECREASE_ACTIVE_COUNT(loop, handle)                             \
   do {                                                                  \
     if (--(handle)->activecnt == 0 &&                                   \
@@ -83,6 +83,91 @@
       (handle)->close_cb((uv_handle_t*) (handle));                      \
   } while (0)
 
+#else
+
+//inline static void DECREASE_ACTIVE_COUNT(uv_loop_t * loop, uv_stream_t * handle)
+//{
+//    do {
+//        if (--(handle)->activecnt == 0 &&
+//            !((handle)->flags & UV__HANDLE_CLOSING)) {
+//            uv__handle_stop((handle));
+//        }
+//        assert((handle)->activecnt >= 0);
+//    } while (0);
+//}
+
+#define DECREASE_ACTIVE_COUNT(loop, handle)                             \
+  do {                                                                  \
+    if (--(handle)->activecnt == 0 &&                                   \
+        !((handle)->flags & UV__HANDLE_CLOSING)) {                      \
+      uv__handle_stop((handle));                                        \
+    }                                                                   \
+    assert((handle)->activecnt >= 0);                                   \
+  } while (0)
+
+inline static void INCREASE_ACTIVE_COUNT(uv_loop_t*loop, uv_stream_t* handle)
+{
+    do {
+        if ((handle)->activecnt++ == 0) {
+            uv__handle_start((handle));
+        }
+        assert((handle)->activecnt > 0);
+    } while (0);
+}
+
+
+//inline static void DECREASE_PENDING_REQ_COUNT(handle)
+//{
+//    do {
+//        assert(handle->reqs_pending > 0);
+//        handle->reqs_pending--;
+//
+//        if (handle->flags & UV__HANDLE_CLOSING &&
+//            handle->reqs_pending == 0) {
+//            uv_want_endgame(loop, (uv_handle_t*)handle);
+//        }
+//    } while (0);
+//}
+#define DECREASE_PENDING_REQ_COUNT(handle)                              \
+  do {                                                                  \
+    assert(handle->reqs_pending > 0);                                   \
+    handle->reqs_pending--;                                             \
+                                                                        \
+    if (handle->flags & UV__HANDLE_CLOSING &&                           \
+        handle->reqs_pending == 0) {                                    \
+      uv_want_endgame(loop, (uv_handle_t*)handle);                      \
+    }                                                                   \
+  } while (0)
+
+inline static void uv__handle_closing(uv_handle_t * handle)
+{
+    do {
+        assert(!((handle)->flags & UV__HANDLE_CLOSING));
+
+        if (!(((handle)->flags & UV__HANDLE_ACTIVE) &&
+            ((handle)->flags & UV__HANDLE_REF)))
+            uv__active_handle_add((uv_handle_t*)(handle));
+
+        (handle)->flags |= UV__HANDLE_CLOSING;
+        (handle)->flags &= ~UV__HANDLE_ACTIVE;
+    } while (0);
+}
+
+inline static void uv__handle_close(uv_handle_t * handle)
+{
+    do {
+        ngx_queue_remove(&(handle)->handle_queue);
+        uv__active_handle_rm((uv_handle_t*)(handle));
+    
+        (handle)->flags |= UV_HANDLE_CLOSED;
+    
+        if ((handle)->close_cb)
+            (handle)->close_cb((uv_handle_t*)(handle));
+    } while (0);
+}
+
+#endif
+
 
 INLINE static void uv_want_endgame(uv_loop_t* loop, uv_handle_t* handle) {
   if (!(handle->flags & UV_HANDLE_ENDGAME_QUEUED)) {
@@ -95,7 +180,7 @@ INLINE static void uv_want_endgame(uv_loop_t* loop, uv_handle_t* handle) {
 
 
 INLINE static void uv_process_endgames(uv_loop_t* loop) {
-    UVLOG("%s\n", __FUNCTION__);
+    UVLOG("----------------> %s\n", __FUNCTION__);
   uv_handle_t* handle;
 
   while (loop->endgame_handles) {

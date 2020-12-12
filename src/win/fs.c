@@ -39,7 +39,7 @@
 #define UV_FS_FREE_PTR           0x0008
 #define UV_FS_CLEANEDUP          0x0010
 
-
+#if 0
 #define QUEUE_FS_TP_JOB(loop, req)                                          \
   fprintf(stderr,"QUEUE_FS_TP_JOB in %s req=%p  follow QueueUserWorkItem \n",__FUNCTION__,req);      \
   do {                                                                      \
@@ -52,6 +52,24 @@
     fprintf(stderr,"QUEUE_FS_TP_JOB in %s req=%p  after QueueUserWorkItem \n",__FUNCTION__,req);      \
     uv__req_register(loop, req);                                            \
   } while (0)
+
+#else
+DWORD WINAPI uv_fs_thread_proc(void* parameter);
+inline static void QUEUE_FS_TP_JOB(uv_loop_t * loop, uv_fs_t*req)
+{
+	fprintf(stderr, "QUEUE_FS_TP_JOB in %s req=%p  follow QueueUserWorkItem \n", __FUNCTION__, req);
+	do {
+		if (!QueueUserWorkItem(&uv_fs_thread_proc,
+			req,
+			WT_EXECUTEDEFAULT)) {
+			uv__set_sys_error((loop), GetLastError());
+			return -1;
+		}
+		fprintf(stderr, "QUEUE_FS_TP_JOB in %s req=%p  after QueueUserWorkItem \n", __FUNCTION__, req);
+		uv__req_register(loop, req);
+	} while (0);
+}
+#endif
 
 #define SET_UV_LAST_ERROR_FROM_REQ(req)                                     \
   uv__set_error(req->loop, req->errorno, req->sys_errno_)

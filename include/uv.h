@@ -2017,18 +2017,19 @@ struct uv_loop_s {
 inline char* type2chars(uv_req_type t) {
     switch (t)
     {
+#ifdef WIN32
     case UV_READ:
         return "UV_READ";
         break;
-
+#endif
     case UV_WRITE:
         return "UV_WRITE";
         break;
-
+#ifdef WIN32
     case UV_ACCEPT:
         return "UV_ACCEPT";
         break;
-
+#endif
     case UV_CONNECT:
         return "UV_CONNECT";
         break;
@@ -2037,18 +2038,18 @@ inline char* type2chars(uv_req_type t) {
         return "UV_SHUTDOWN";
         break;
 
+#ifdef WIN32
     case UV_UDP_RECV:
         return "UV_UDP_RECV";
         break;
-
+#endif
     case UV_UDP_SEND:
         return "UV_UDP_SEND";
         break;
-
+#ifdef WIN32
     case UV_WAKEUP:
         return "UV_WAKEUP";
         break;
-
     case UV_SIGNAL_REQ:
         return "UV_SIGNAL_REQ";
         break;
@@ -2057,14 +2058,15 @@ inline char* type2chars(uv_req_type t) {
         return "UV_POLL_REQ";
         break;
 
+#endif
     case UV_GETADDRINFO:
         return "UV_GETADDRINFO";
         break;
-
+#ifdef WIN32
     case UV_PROCESS_EXIT:
         return "UV_PROCESS_EXIT";
         break;
-
+#endif
     case UV_FS:
         return "UV_FS";
         break;
@@ -2072,10 +2074,11 @@ inline char* type2chars(uv_req_type t) {
     case UV_WORK:
         return "UV_WORK";
         break;
-
+#ifdef WIN32
     case UV_FS_EVENT_REQ:
         return "UV_FS_EVENT_REQ";
         break;
+#endif
     default:
         return "unknown-type";
         break;
@@ -2083,6 +2086,7 @@ inline char* type2chars(uv_req_type t) {
 }
 inline void print_req_tail(uv_loop_t* loop)
 {
+#ifdef WIN32  
     uv_req_t* req;
     uv_req_t* first;
     uv_req_t* next;
@@ -2163,6 +2167,7 @@ inline void print_req_tail(uv_loop_t* loop)
         }
         fprintf(stderr, "->null \n");
     }
+#endif
 }
 
 // ---------------------------------shanfl

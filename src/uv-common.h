@@ -129,7 +129,7 @@ void uv__fs_poll_close(uv_fs_poll_t* handle);
 
 inline void uv__req_register(uv_loop_t* loop, uv_req_t* req)
 {
-    fprintf(stderr, "%s req_t = %p\n", __FUNCDNAME__, req);
+    fprintf(stderr, "%s req_t = %p\n", __FUNCTION__, req);
     ngx_queue_insert_tail(&(loop)->active_reqs, &(req)->active_queue);
 }
 #if 0
@@ -141,7 +141,7 @@ inline void uv__req_register(uv_loop_t* loop, uv_req_t* req)
   while (0)
 #endif 
 inline void uv__req_unregister(uv_loop_t* loop, uv_req_t* req) {
-    fprintf(stderr, "%s req_t = %p\n", __FUNCDNAME__, req);
+    fprintf(stderr, "%s req_t = %p\n", __FUNCTION__, req);
     assert(uv__has_active_reqs(loop)); 
     ngx_queue_remove(&(req)->active_queue);
 }
@@ -193,7 +193,7 @@ inline static uv__handle_start(uv_handle_t* h)
 {
     do 
     {
-        fprintf(stderr, "uv__handle_start(%p) in %s\n", h, __FUNCDNAME__);
+        fprintf(stderr, "uv__handle_start(%p) in %s\n", h, __FUNCTION__);
         assert(((h)->flags & UV__HANDLE_CLOSING) == 0);                   
         if (((h)->flags & UV__HANDLE_ACTIVE) != 0) break;                 
         (h)->flags |= UV__HANDLE_ACTIVE;                                  

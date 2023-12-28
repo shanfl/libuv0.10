@@ -9,6 +9,7 @@
 core
 vgcore.*
 .buildstamp
+[Bb]uild/
 
 /libuv.so
 /libuv.dylib

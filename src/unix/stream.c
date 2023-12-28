@@ -34,6 +34,9 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include <limits.h> /* IOV_MAX */
+#if !defined IOV_MAX
+#define IOV_MAX 1024
+#endif
 
 #if defined(__APPLE__)
 # include <sys/event.h>
